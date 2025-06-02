@@ -4,7 +4,7 @@ import { Puritan } from 'next/font/google'
 const isPublicRoute = createRouteMatcher(['/sign-in(.*)', '/sign-up(.*)', "/"])
 
 export default clerkMiddleware(async (auth, req) => {
-  if (!isPublicRoute(req)) {
+  if (  !isPublicRoute(req)) {
     await auth.protect()
   }
 
