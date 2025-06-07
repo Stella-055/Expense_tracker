@@ -1,6 +1,5 @@
 /** @type {import('drizzle-kit').Config} */
 
-require('dotenv').config();
 
 module.exports = {
   schema: './utils/schema.jsx',
