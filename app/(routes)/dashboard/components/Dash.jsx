@@ -4,8 +4,8 @@ const Dash = () => {
   return (
     <div className=' p-5 shadow-sm border- flex justify-between'>
     
-    <div> search</div>
-    <div><UserButton/></div>
+     <div></div>
+    <div ><UserButton/></div>
     </div>
   )
 }
