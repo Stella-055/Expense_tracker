@@ -7,17 +7,40 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogClose,
+  DialogFooter
 } from "@/components/ui/dialog"
 import EmojiPicker from 'emoji-picker-react'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 import { Input } from '@/components/ui/input'
+import { db } from '@/db'
+import { Budget } from '@/db/schema'
+import { useUser } from '@clerk/nextjs'
+import { toast } from "sonner"
 
 const CreateBudget = () => {
   const [emoji, setEmoji] = useState("💰");
   const [opeEmojiPicker,setopenEmojiPicker] = useState(false);
   const [budgetName , setBudgetName] = useState();
   const [budgetAmount , setBudgetAmount] = useState();
+  const { user } = useUser()
+
+async function onSubmitBudget() {
+  const results= await db.insert(Budget).values({
+name:budgetName,
+amount:budgetAmount,
+createdBy:user?.primaryEmailAddress?.emailAddress,
+icon:emoji
+
+  }).returning({insertedId:Budget.id})
+
+  if (results){
+    toast("Budget has been created.")
+  }
+  
+}
+
   return (
     <div>
        
@@ -54,11 +77,16 @@ const CreateBudget = () => {
           <h2 className='text-black my-1 font-medium'>Budget Amount</h2>
           <Input placeholder="eg 10000ksh" type="number" onChange= { (e)=>{ setBudgetAmount (e.target.value)}}/>
           </div>
-          <Button className="mt-5 w-full" disabled= {!(budgetAmount && budgetName)} >Create Budget</Button>
+        
           </div>
           
       </DialogDescription>
     </DialogHeader>
+    <DialogFooter className="sm:justify-start">
+          <DialogClose asChild>
+          <Button className="mt-5 w-full" disabled= {!(budgetAmount && budgetName)} onClick ={()=>onSubmitBudget()} >Create Budget</Button>
+          </DialogClose>
+        </DialogFooter>
   </DialogContent>
 </Dialog>
     </div>
