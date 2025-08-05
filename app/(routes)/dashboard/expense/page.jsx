@@ -6,5 +6,4 @@ const page = () => {
    <div> expenses</div>
   )
 }
-
-export default page
+  export default page
